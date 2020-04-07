@@ -43,6 +43,19 @@ void reconstruct(int rest, int item, vector<int> &picked) {
 	}
 }
 
+void reconstructBitmask(int rest, int item, int &picked) {
+	if (item == N) return;
+
+	if (pack(rest, item) == pack(rest, item + 1)) {
+		reconstructBitmask(rest, item + 1, picked);
+	}
+	else {
+		picked |= 1 << item;
+		reconstructBitmask(rest - volume[item], item + 1, picked);
+	}
+
+}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
@@ -57,13 +70,21 @@ int main() {
 		}
 
 		memset(cache, -1, sizeof(cache));
-		vector<int> picked;
 
-		reconstruct(W, 0, picked);	
-		cout << pack(W, 0) << " " << picked.size() << "\n";
+		//vector<int> picked;
+		//reconstruct(W, 0, picked);	
+		//cout << pack(W, 0) << " " << picked.size() << "\n";
 		
-		for (int i = 0; i < picked.size(); ++i) {
-			cout << list[picked[i]] << "\n";
+		int picked;
+		reconstructBitmask(W, 0, picked);
+		int pickedSize = __builtin_popcount(picked); 
+		cout << pack(W, 0) << " " << pickedSize << "\n";
+
+		int shift = 0;
+		while (shift <= pickedSize) {
+			if ((picked >> shift) & 1)
+				cout << list[shift] << "\n";
+			shift++;
 		}
 	}
 	return 0;
