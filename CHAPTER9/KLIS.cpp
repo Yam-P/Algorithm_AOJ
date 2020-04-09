@@ -36,6 +36,8 @@ int count(int cur) {
 	
 	ret = 0;
 	for (int next = cur + 1; next < N; ++next) {
+		// **핵심: 현재 원소부터 시작하는 lis는 다음 원소부터 시작하는 lis보다 한개 많다.
+		//        만약 이 둘이 다른 경우, 즉 next 원소부터 시작하는 수열의 lis가 더 적은 경우는 전체 lis를 만들지 못한다.
 		if ((cur == -1 || S[cur] < S[next]) && lis(cur) == lis(next) + 1)
 			// 조건을 만족시키는 경우 하나씩 더해나가기
 			ret = min<long long>(MAX, (long long)ret + count(next));		
@@ -49,11 +51,12 @@ void reconstruct(int cur, int skip, vector<int> &set) {
 	vector<pair<int, int> > followers;
 	for (int next = cur + 1; next < N; ++next) {
 		if ((cur == -1 || S[cur] < S[next]) && lis(cur) == lis(next) + 1)
-			// 다음 수와, 그 수의 index 넣기.
+			// cur이 -1인 경우, lis를 최대로 만드는 경우가 두가지라면
+			// 두 수와 그 인덱스를 넣어놓기.
 			followers.push_back(make_pair(S[next], next));
 	}
 
-	// 다음 수가 낮은 순서대로 배열
+	// lis를 만족시키는 다음 숫자들을 순서대로 sort
 	// cur = -1인 경우 {5, 0}->{1, 1}을 {1, 1}->{5,0} 순서로.
 	sort(followers.begin(), followers.end());
 	
