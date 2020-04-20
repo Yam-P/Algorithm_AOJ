@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <queue>
 
 using namespace std;
 
@@ -27,6 +28,25 @@ void josephus(int n, int k) {
 	cout << survivors.front() << " " << survivors.back() << "\n";
 }
 
+void josephusQueue(int n, int k) {
+	queue<int> survivors;
+	for (int i = 1; i <= n; ++i) {
+		survivors.push(i);
+	}
+
+	while (n > 2) {
+		survivors.pop();
+		--n;
+		for (int i = 0; i < k - 1; ++i) {
+			int goBack = survivors.front();
+			survivors.pop();
+			survivors.push(goBack);
+		}		
+	}
+	cout << survivors.front() << " " << survivors.back() << "\n";
+
+}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
@@ -36,7 +56,8 @@ int main() {
 	while(C-- > 0) {
 		int N, K;
 		cin >> N >> K;
-		josephus(N, K);
+		//josephus(N, K);
+		josephusQueue(N, K);
 	}
 	
 	return 0;
