@@ -84,7 +84,7 @@ Node* merge(Node* a, Node* b) {
 	}
 }
 
-Node* kth(Node* root, int KeyType) {
+Node* kth(Node* root, KeyType k) {
 	int leftSize = 0;
 	if (k != 0) leftSize = root->left->size;
 	if (k <= leftSize) return kth(root->left, k);
